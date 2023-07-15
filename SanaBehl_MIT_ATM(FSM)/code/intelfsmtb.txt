@@ -1,0 +1,182 @@
+module intelfsmtb1;
+  
+  reg clk;
+  reg reset;
+  reg [3:0] user_input;
+  reg [15:0] amount;
+  reg facial_recognition_result;
+  
+  wire [7:0] display;
+  wire cash_dispenser;
+  wire account_lock;
+  wire [15:0] balance;
+  wire [7:0] mini_statement;
+  
+  ATM_MealyFSM dut (
+    .clk(clk),
+    .reset(reset),
+    .user_input(user_input),
+    .amount(amount),
+    .facial_recognition_result(facial_recognition_result),
+    .display(display),
+    .cash_dispenser(cash_dispenser),
+    .account_lock(account_lock),
+    .balance(balance),
+    .mini_statement(mini_statement)
+  );
+  
+  // Clock generator
+  always #5 clk = ~clk;
+  
+  initial begin
+    // Initialize inputs
+    clk = 0;
+    reset = 1;
+    user_input = 4'b0000;
+    amount = 16'b0;
+    facial_recognition_result = 0;
+    
+    // Wait for reset to complete
+    #10 reset = 0;
+    
+    // Test case 1: Enter PIN
+    user_input = 4'b0000;
+    #10;
+    $display("Test Case 1: Enter PIN");
+    $display("Display: %s", display);
+    $display("Cash Dispenser: %b", cash_dispenser);
+    $display("Account Lock: %b", account_lock);
+    $display("Balance: %d", balance);
+    $display("Mini Statement: %s", mini_statement);
+    $display("");
+    
+    // Test case 2: Invalid PIN
+    user_input = 4'b1111;
+    #10;
+    $display("Test Case 2: Invalid PIN");
+    $display("Display: %s", display);
+    $display("Cash Dispenser: %b", cash_dispenser);
+    $display("Account Lock: %b", account_lock);
+    $display("Balance: %d", balance);
+    $display("Mini Statement: %s", mini_statement);
+    $display("");
+    
+    // Test case 3: Invalid PIN
+    user_input = 4'b1111;
+    #10;
+    $display("Test Case 3: Invalid PIN");
+    $display("Display: %s", display);
+    $display("Cash Dispenser: %b", cash_dispenser);
+    $display("Account Lock: %b", account_lock);
+    $display("Balance: %d", balance);
+    $display("Mini Statement: %s", mini_statement);
+    $display("");
+    
+    // Test case 4: Account locked
+    user_input = 4'b1111;
+    facial_recognition_result = 0;
+    #10;
+    $display("Test Case 4: Account locked");
+    $display("Display: %s", display);
+    $display("Cash Dispenser: %b", cash_dispenser);
+    $display("Account Lock: %b", account_lock);
+    $display("Balance: %d", balance);
+    $display("Mini Statement: %s", mini_statement);
+    $display("");
+    
+    // Test case 5: Account unlocked
+    user_input = 4'b0000;
+    #240;
+    $display("Test Case 5: Account unlocked");
+    $display("Display: %s", display);
+    $display("Cash Dispenser: %b", cash_dispenser);
+    $display("Account Lock: %b", account_lock);
+    $display("Balance: %d", balance);
+    $display("Mini Statement: %s", mini_statement);
+    $display("");
+    
+    // Test case 6: Withdrawal - Sufficient funds
+    user_input = 4'b0001;
+    amount = 1000;
+    #10;
+    $display("Test Case 6: Withdrawal - Sufficient funds");
+    $display("Display: %s", display);
+    $display("Cash Dispenser: %b", cash_dispenser);
+    $display("Account Lock: %b", account_lock);
+    $display("Balance: %d", balance);
+    $display("Mini Statement: %s", mini_statement);
+    $display("");
+    
+    // Test case 7: Withdrawal - Insufficient funds
+    user_input = 4'b0001;
+    amount = 5000;
+    #10;
+    $display("Test Case 7: Withdrawal - Insufficient funds");
+    $display("Display: %s", display);
+    $display("Cash Dispenser: %b", cash_dispenser);
+    $display("Account Lock: %b", account_lock);
+    $display("Balance: %d", balance);
+    $display("Mini Statement: %s", mini_statement);
+    $display("");
+    
+    // Test case 8: Facial Recognition - Successful
+    user_input = 4'b0000;
+    facial_recognition_result = 1;
+    #10;
+    $display("Test Case 8: Facial Recognition - Successful");
+    $display("Display: %s", display);
+    $display("Cash Dispenser: %b", cash_dispenser);
+    $display("Account Lock: %b", account_lock);
+    $display("Balance: %d", balance);
+    $display("Mini Statement: %s", mini_statement);
+    $display("");
+    
+    // Test case 9: Facial Recognition - Failed
+    user_input = 4'b0000;
+    facial_recognition_result = 0;
+    #10;
+    $display("Test Case 9: Facial Recognition - Failed");
+    $display("Display: %s", display);
+    $display("Cash Dispenser: %b", cash_dispenser);
+    $display("Account Lock: %b", account_lock);
+    $display("Balance: %d", balance);
+    $display("Mini Statement: %s", mini_statement);
+    $display("");
+    
+    // Test case 10: Deposit
+    user_input = 4'b0010;
+    amount = 2000;
+    #10;
+    $display("Test Case 10: Deposit");
+    $display("Display: %s", display);
+    $display("Cash Dispenser: %b", cash_dispenser);
+    $display("Account Lock: %b", account_lock);
+    $display("Balance: %d", balance);
+    $display("Mini Statement: %s", mini_statement);
+    $display("");
+    
+    // Test case 11: Balance Display
+    user_input = 4'b0011;
+    #10;
+    $display("Test Case 11: Balance Display");
+    $display("Display: %s", display);
+    $display("Cash Dispenser: %b", cash_dispenser);
+    $display("Account Lock: %b", account_lock);
+    $display("Balance: %d", balance);
+    $display("Mini Statement: %s", mini_statement);
+    $display("");
+    
+    // Test case 12: Mini Statement
+    user_input = 4'b0100;
+    #10;
+    $display("Test Case 12: Mini Statement");
+    $display("Display: %s", display);
+    $display("Cash Dispenser: %b", cash_dispenser);
+    $display("Account Lock: %b", account_lock);
+    $display("Balance: %d", balance);
+    $display("Mini Statement: %s", mini_statement);
+    $display("");
+    
+    $finish;
+  end
+endmodule
